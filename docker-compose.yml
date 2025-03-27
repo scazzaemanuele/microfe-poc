@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  shell:
+    build:
+      context: .
+      dockerfile: docker/shell.Dockerfile
+    container_name: nx-microfe-shell
+    ports:
+      - '4200:80'
+    networks:
+      - microfe-network
+    environment:
+      - WIDGET1_URL=http://localhost:4201
+      - WIDGET2_URL=http://localhost:4202
+    depends_on:
+      - widget1
+      - widget2
+
+  widget1:
+    build:
+      context: .
+      dockerfile: docker/widget1.Dockerfile
+    container_name: nx-microfe-widget1
+    ports:
+      - '4201:80'
+    networks:
+      - microfe-network
+
+  widget2:
+    build:
+      context: .
+      dockerfile: docker/widget2.Dockerfile
+    container_name: nx-microfe-widget2
+    ports:
+      - '4202:80'
+    networks:
+      - microfe-network
+
+networks:
+  microfe-network:
+    driver: bridge
